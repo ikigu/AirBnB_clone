@@ -113,3 +113,7 @@ class TestBaseClass(unittest.TestCase):
         extended_dict['updated_at'] = extended_dict['updated_at'].isoformat()
 
         self.assertEqual(b1.to_dict(), extended_dict)
+
+
+if __name__ == "__main__":
+    unittest.main()
