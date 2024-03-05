@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 """
 This module contains unit tests for the Base class of our models.
 """
@@ -106,6 +108,8 @@ class TestBaseClass(unittest.TestCase):
         """Test that todict returns dictionary representation of instance"""
 
         b1 = BaseModel()
-        extended_dict = b1.__dict__['__clas__'] = BaseModel.__name__
+        extended_dict = b1.__dict__['__class__'] = BaseModel.__name__
+        extended_dict['created_at'] = extended_dict['created_at'].isoformat()
+        extended_dict['updated_at'] = extended_dict['updated_at'].isoformat()
 
         self.assertEqual(b1.to_dict(), extended_dict)
