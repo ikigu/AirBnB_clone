@@ -7,15 +7,25 @@ from datetime import datetime
 class BaseModel:
     """Represents the BaseModel of the HBnB project."""
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         """Initialize a new BaseModel.
 
         Args:
             self: BaseModel instance
+            *args (unused): positional arguments
+            **kwargs: keyword arguments
         """
-        self.id = str(uuid4())
-        self.created_at = datetime.today()
-        self.updated_at = datetime.today()
+
+        if kwargs is not None and kwargs != {}:
+            for k, v in kwargs.items():
+                if k == 'created_at' or k == 'updated_at':
+                    self.__dict__[k] = datetime.fromisoformat(v)
+                elif k != '__class__':
+                    self.__dict__[k] = v
+        else:
+            self.id = str(uuid4())
+            self.created_at = datetime.today()
+            self.updated_at = datetime.today()
 
     def save(self):
         """Update updated_at with the current datetime."""
