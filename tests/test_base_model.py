@@ -6,6 +6,7 @@ This module contains unit tests for the Base class of our models.
 
 from models.base_model import BaseModel
 from datetime import datetime
+import models
 import unittest
 import re
 
@@ -102,7 +103,7 @@ class TestBaseClass(unittest.TestCase):
 
         delta = new_date - old_date
 
-        self.assertIsTrue(delta.microseconds > 0)
+        self.assertTrue(delta.microseconds > 0)
 
     def test_todict_method(self):
         """Test that todict returns dictionary representation of instance"""
