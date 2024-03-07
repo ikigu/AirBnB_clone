@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/python3
 
 """Tests the storage engine"""
 
