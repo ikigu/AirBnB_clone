@@ -2,7 +2,7 @@
 """Defines the FileStorage class for persistent object storage."""
 import json
 from models.base_model import BaseModel
-from models.user import User
+# from models.user import User
 
 
 class FileStorage:
@@ -42,4 +42,3 @@ class FileStorage:
                     self.new(eval(cls_name)(**o))
         except FileNotFoundError:
             return
-        
