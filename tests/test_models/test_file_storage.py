@@ -18,8 +18,10 @@ class TestFileStorage(unittest.TestCase):
         base_model_instance = BaseModel()
         base_model_instance.name = "new_object"
         base_model_instance.save()
+        base_model_classname = base_model_instance.to_dict()['__class__']
 
         all_objects = storage.all()
 
         self.assertEqual(
-            all_objects[base_model_instance.id], base_model_instance.to_dict())
+            all_objects[f"{base_model_classname}.{base_model_instance.id}"]
+            .to_dict(), base_model_instance.to_dict())
