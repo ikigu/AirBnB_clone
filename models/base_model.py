@@ -2,6 +2,7 @@
 """Define the BaseModel class."""
 from uuid import uuid4
 from datetime import datetime
+import copy
 
 
 class BaseModel:
