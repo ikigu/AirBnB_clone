@@ -118,7 +118,7 @@ class HBNBCommand(cmd.Cmd):
         all_objects = storage.all()
 
         if len(arg) == 0:
-            return print(all_objects)
+            return print([v.__str__() for k, v in all_objects.items()])
 
         class_name = arg.split()[0]
 
