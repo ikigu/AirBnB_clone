@@ -27,6 +27,41 @@ class HBNBCommand(cmd.Cmd):
             print("** instance id missing **")
             return False
 
+    def __get_args(self, arg):
+        """Gets args from console"""
+
+        args_are_valid = HBNBCommand.__validate_arguments(arg)
+
+        if args_are_valid is False:
+            return False
+
+        args = arg.split('"')
+
+        if len(args) == 1:
+            args = [item for item in args[0].split()]
+
+            if len(args) == 3:
+                print("** attribute name missing **")
+                return False
+            elif len(args) == 4:
+                print("** value missing **")
+                return False
+
+            return args
+
+        args = [item.strip() for item in args if len(item) != 0]
+
+        if len(args) == 2:
+
+            if len(args[0].split()) == 3:
+                print("** value missing **")
+                return False
+
+            return [*args[0], args[1]]
+
+        if len(args) == 3:
+            return [*args[0], args[1], args[2]]
+
     def do_quit(self, arg):
         """Quit the command interpreter."""
         exit()
