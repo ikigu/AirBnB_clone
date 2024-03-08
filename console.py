@@ -16,53 +16,57 @@ class HBNBCommand(cmd.Cmd):
 
     __available_classes = ('BaseModel', 'User')
 
-    def __validate_arguments(self, arg):
-        if len(arg) == 0:
-            print("** class name missing **")
-            return False
-        elif arg.split()[0] not in HBNBCommand.__available_classes:
-            print("** class name doesn't exist **")
-            return False
-        elif len(arg.split()) == 1:
-            print("** instance id missing **")
-            return False
-
-    def __get_args(self, arg):
+    def __get_args(self, line):
         """Gets args from console"""
 
-        args_are_valid = HBNBCommand.__validate_arguments(arg)
+        if '"' not in line:
+            return line.split()
 
-        if args_are_valid is False:
+        open_quote = False
+        arguments_list = []
+        current_argument = ""
+
+        # Loop through the string
+        for char in line:
+            if open_quote is False and char == '"':
+                open_quote = True
+                continue
+            elif open_quote is True and char == '"':
+                open_quote = False
+                arguments_list.append(current_argument)
+                current_argument = ""
+            elif open_quote is True and char == ' ':
+                current_argument += char
+            elif open_quote is False and char == ' ':
+                if len(current_argument) != 0:
+                    arguments_list.append(current_argument)
+                    current_argument = ""
+            elif char not in ' "':
+                current_argument += char
+
+        if current_argument:
+            arguments_list.append(current_argument)
+
+        return arguments_list
+
+    def __validate_arguments(self, args, command=None):
+        if len(args) == 0:
+            print("** class name missing **")
+            return False
+        elif args[0] not in HBNBCommand.__available_classes:
+            print("** class name doesn't exist **")
+            return False
+        elif len(args) == 1:
+            print("** instance id missing **")
+            return False
+        elif command == 'update' and len(args) == 2:
+            print("** attribute name missing **")
+            return False
+        elif command == 'update' and len(args) == 3:
+            print("** value missing **")
             return False
 
-        args = arg.split('"')
-
-        if len(args) == 1:
-            args = [item for item in args[0].split()]
-
-            if len(args) == 3:
-                print("** attribute name missing **")
-                return False
-            elif len(args) == 4:
-                print("** value missing **")
-                return False
-
-            return args
-
-        args = [item.strip() for item in args if len(item) != 0]
-
-        if len(args) == 2:
-
-            if len(args[0].split()) == 3:
-                print("** value missing **")
-                return False
-
-            return [*args[0], args[1]]
-
-        if len(args) == 3:
-            return [*args[0], args[1], args[2]]
-
-    def do_quit(self, arg):
+    def do_quit(self, line):
         """Quit the command interpreter."""
         exit()
 
@@ -72,11 +76,11 @@ class HBNBCommand(cmd.Cmd):
         """Handle an empty line input."""
         pass
 
-    def do_help(self, arg):
+    def do_help(self, line):
         """Show help for available commands."""
-        super().do_help(arg)
+        super().do_help(line)
 
-    def do_create(self, arg):
+    def do_create(self, line):
         """
         Creates a new instance of BaseModel,
         saves it (to the JSON file) and prints the id.
@@ -86,16 +90,19 @@ class HBNBCommand(cmd.Cmd):
             arg (string): space-delimited list of arguments
         """
 
-        if len(arg) == 0:
-            return print("** class name missing **")
-        elif arg not in HBNBCommand.__available_classes:
-            return print("** class doesn't exist **")
+        args = self.__get_args(line)
+        args_are_valid = self.__validate_arguments
 
-        instance = eval(arg)()
+        if args_are_valid is False:
+            return
+
+        class_name = args[0]
+
+        instance = eval(class_name)()
         instance.save()
         print(instance.id)
 
-    def do_show(self, arg):
+    def do_show(self, line):
         """
         Prints stirng representateion of instance
         based on the class name and id
@@ -105,20 +112,24 @@ class HBNBCommand(cmd.Cmd):
             arg: space-delimited list of arguments
         """
 
-        args_are_valid = self.__validate_arguments(arg)
+        args = self.__get_args(line)
+        args_are_valid = self.__validate_arguments(args)
 
         if args_are_valid is False:
             return
 
         all_objects = storage.all()
 
+        class_name = args[0]
+        object_id = args[1]
+
         try:
-            instance = all_objects[f"{arg.split()[0]}.{arg.split()[1]}"]
+            instance = all_objects[f"{class_name}.{object_id}"]
             print(instance)
         except KeyError:
             print("** no instance found **")
 
-    def do_destroy(self, arg):
+    def do_destroy(self, line):
         """
         Deletes an instance based on the class name and id
 
@@ -127,20 +138,23 @@ class HBNBCommand(cmd.Cmd):
             args: space-delimited list of arguments
         """
 
-        args_are_valid = self.__validate_arguments(arg)
+        args = self.__get_args(line)
+        args_are_valid = self.__validate_arguments(args)
 
         if args_are_valid is False:
             return
 
         all_objects = storage.all()
+        class_name = args[0]
+        object_id = args[1]
 
         try:
-            del all_objects[f"{arg.split()[0]}.{arg.split()[1]}"]
+            del all_objects[f"{class_name}.{object_id}"]
             storage.save()
         except KeyError:
             print("** no instance found **")
 
-    def do_all(self, arg):
+    def do_all(self, line):
         """
         Prints all string representation of all instances
         based or not on the class name.
@@ -152,17 +166,17 @@ class HBNBCommand(cmd.Cmd):
 
         all_objects = storage.all()
 
-        if len(arg) == 0:
+        if len(line) == 0:
             return print([v.__str__() for k, v in all_objects.items()])
 
-        class_name = arg.split()[0]
+        class_name = line.split()[0]
 
         if class_name in self.__available_classes:
             return print([v.__str__() for k, v in all_objects.items() if class_name in k])
         else:
             return print("** class doesn't exist **")
 
-    def do_update(self, arg):
+    def do_update(self, line):
         """
         Updates an instance based on the class name and id
         by adding or updating attribute (save the change into
@@ -173,20 +187,16 @@ class HBNBCommand(cmd.Cmd):
             arg: space-delimited arguments
         """
 
-        args_are_valid = self.__validate_arguments(arg)
+        args = self.__get_args(line)
+        args_are_valid = self.__validate_arguments(args)
 
         if args_are_valid is False:
             return
 
-        try:
-            attr_key = arg.split()[2]
-        except IndexError:
-            return print("** attribute name missing **")
-
-        try:
-            attr_value = arg.split()[3]
-        except IndexError:
-            return print("** value missing **")
+        class_name = args[0]
+        object_id = args[1]
+        attr_key = args[2]
+        attr_value = args[3]
 
         try:
             attr_value = int(attr_value)
@@ -194,17 +204,13 @@ class HBNBCommand(cmd.Cmd):
             pass
 
         all_objects = storage.all()
-        class_name = arg.split()[0]
-        instance_id = arg.split()[1]
 
         try:
-            target_instance = all_objects[f"{class_name}.{instance_id}"]
+            target_instance = all_objects[f"{class_name}.{object_id}"]
             target_instance.__dict__[attr_key] = attr_value
             storage.save()
         except KeyError:
             print("** no instance found **")
-
-        # ToDo: Accept multi-word args surrounded by quotes
 
 
 if __name__ == '__main__':
