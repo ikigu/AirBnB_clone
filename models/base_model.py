@@ -18,6 +18,7 @@ class BaseModel:
             **kwargs: keyword arguments
         """
 
+        # Kwargs not None means you're creating objects from a file
         if kwargs is not None and kwargs != {}:
             for k, v in kwargs.items():
                 if k == 'created_at' or k == 'updated_at':
@@ -25,14 +26,16 @@ class BaseModel:
                 elif k != '__class__':
                     self.__dict__[k] = v
         else:
+            # This means you're creating a new object
             self.id = str(uuid4())
             self.created_at = datetime.today()
-            self.updated_at = datetime.today()
+            self.updated_at = self.created_at
 
     def save(self):
         """Update updated_at with the current datetime."""
         self.updated_at = datetime.today()
-        storage.save(self)
+        storage.new(self)
+        storage.save()
 
     def to_dict(self):
         """Return the dictionary of the BaseModel instance.

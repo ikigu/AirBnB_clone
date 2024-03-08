@@ -1,8 +1,6 @@
 #!/usr/bin/python3
 """Defines the FileStorage class for persistent object storage."""
 import json
-from models.base_model import BaseModel
-from models.user import User
 
 
 class FileStorage:
@@ -13,7 +11,7 @@ class FileStorage:
         __objects (dict): A dictionary of storing all objects.
     """
     __file_path = "file.json"
-    __objects = {}
+    __objects: dict = {}
 
     def all(self):
         """Return the dictionary __objects."""
@@ -32,7 +30,14 @@ class FileStorage:
             json.dump(objdict, f)
 
     def reload(self):
-        """Deserialize the JSON file __file_path to __objects, if it exists. Populate the storage engine"""
+        """
+        Deserialize the JSON file __file_path
+        to __objects, if it exists. Populate the storage engine
+        """
+
+        from models.base_model import BaseModel
+        from models.user import User
+
         try:
             with open(FileStorage.__file_path) as f:
                 objdict = json.load(f)
@@ -42,4 +47,3 @@ class FileStorage:
                     self.new(eval(cls_name)(**o))
         except FileNotFoundError:
             return
-        
