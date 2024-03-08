@@ -1,9 +1,11 @@
 #!/usr/bin/python3
 """Defines the HBNBCommand class for command line interpretation."""
 
-import cmd
 from models.base_model import BaseModel
+from models.user import User
 from models import storage
+
+import cmd
 
 
 class HBNBCommand(cmd.Cmd):
@@ -12,7 +14,7 @@ class HBNBCommand(cmd.Cmd):
     prompt = "(hbnb) "
     intro = "Welcome to the hbnb command interpreter type 'help' to list available commands"
 
-    __available_classes = ['BaseModel']
+    __available_classes = ('BaseModel', 'User')
 
     def __validate_arguments(self, arg):
         if len(arg) == 0:
@@ -49,16 +51,14 @@ class HBNBCommand(cmd.Cmd):
             arg (string): space-delimited list of arguments
         """
 
-        HBNBCommand.__available_classes = ('BaseModel')
-
         if len(arg) == 0:
             return print("** class name missing **")
         elif arg not in HBNBCommand.__available_classes:
             return print("** class doesn't exist **")
 
-        b1 = BaseModel()
-        b1.save()
-        print(b1.id)
+        instance = eval(arg)()
+        instance.save()
+        print(instance.id)
 
     def do_show(self, arg):
         """
