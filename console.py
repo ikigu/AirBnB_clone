@@ -212,6 +212,8 @@ class HBNBCommand(cmd.Cmd):
         except KeyError:
             print("** no instance found **")
 
+## Some dummy test code
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
