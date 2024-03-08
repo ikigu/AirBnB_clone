@@ -36,6 +36,7 @@ class FileStorage:
         """
 
         from models.base_model import BaseModel
+        from models.user import User
 
         try:
             with open(FileStorage.__file_path) as f:
