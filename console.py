@@ -1,9 +1,14 @@
 #!/usr/bin/python3
 """Defines the HBNBCommand class for command line interpretation."""
 
-from models.base_model import BaseModel
-from models.user import User
 from models import storage
+from models.amenity import Amenity
+from models.base_model import BaseModel
+from models.city import City
+from models.place import Place
+from models.review import Review
+from models.state import State
+from models.user import User
 
 import cmd
 
@@ -12,9 +17,9 @@ class HBNBCommand(cmd.Cmd):
     """Runs HBNB console"""
 
     prompt = "(hbnb) "
-    intro = "Welcome to the hbnb command interpreter type 'help' to list available commands"
 
-    __available_classes = ('BaseModel', 'User')
+    __available_classes = ('Amenity', 'BaseModel', 'City',
+                           'Place', 'Review', 'State', 'User')
 
     def __get_args(self, line):
         """Gets args from console"""
@@ -84,10 +89,6 @@ class HBNBCommand(cmd.Cmd):
         """
         Creates a new instance of BaseModel,
         saves it (to the JSON file) and prints the id.
-
-        Args:
-            self: represents object instance
-            arg (string): space-delimited list of arguments
         """
 
         args = self.__get_args(line)
@@ -104,12 +105,8 @@ class HBNBCommand(cmd.Cmd):
 
     def do_show(self, line):
         """
-        Prints stirng representateion of instance
+        Prints string representateion of instance
         based on the class name and id
-
-        Args:
-            self: represents object instance
-            arg: space-delimited list of arguments
         """
 
         args = self.__get_args(line)
@@ -132,10 +129,6 @@ class HBNBCommand(cmd.Cmd):
     def do_destroy(self, line):
         """
         Deletes an instance based on the class name and id
-
-        Args:
-            self: represents object instance
-            args: space-delimited list of arguments
         """
 
         args = self.__get_args(line)
@@ -158,10 +151,6 @@ class HBNBCommand(cmd.Cmd):
         """
         Prints all string representation of all instances
         based or not on the class name.
-
-        Args:
-            self: represents object instances
-            arg: space-delimited list of arguments
         """
 
         all_objects = storage.all()
@@ -172,7 +161,8 @@ class HBNBCommand(cmd.Cmd):
         class_name = line.split()[0]
 
         if class_name in self.__available_classes:
-            return print([v.__str__() for k, v in all_objects.items() if class_name in k])
+            return print([v.__str__()
+                          for k, v in all_objects.items() if class_name in k])
         else:
             return print("** class doesn't exist **")
 
@@ -181,10 +171,6 @@ class HBNBCommand(cmd.Cmd):
         Updates an instance based on the class name and id
         by adding or updating attribute (save the change into
         the JSON file)
-
-        Args:
-            self: object instance
-            arg: space-delimited arguments
         """
 
         args = self.__get_args(line)

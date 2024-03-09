@@ -34,7 +34,8 @@ class FileStorage:
 
         all_app_objects = FileStorage.__objects
         all_app_objects = {
-            obj: all_app_objects[obj].to_dict() for obj in all_app_objects.keys()}
+            obj: all_app_objects[obj].to_dict()
+            for obj in all_app_objects.keys()}
 
         with open(FileStorage.__file_path, "w") as storage_file:
             json.dump(all_app_objects, storage_file)
