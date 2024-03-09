@@ -2,7 +2,6 @@
 """Define the BaseModel class."""
 from uuid import uuid4
 from datetime import datetime
-import copy
 from models import storage
 
 
@@ -32,6 +31,7 @@ class BaseModel:
             self.id = str(uuid4())
             self.created_at = datetime.today()
             self.updated_at = self.created_at
+            storage.new(self)
 
     def save(self):
         """
@@ -39,7 +39,6 @@ class BaseModel:
         datetime and writes the instance to file.
         """
         self.updated_at = datetime.today()
-        storage.new(self)
         storage.save()
 
     def to_dict(self):
