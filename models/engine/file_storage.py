@@ -1,6 +1,10 @@
 #!/usr/bin/python3
 """Defines the FileStorage class for persistent object storage."""
+
+
 import json
+import models
+import sys
 
 
 class FileStorage:
@@ -51,11 +55,14 @@ class FileStorage:
 
         try:
             with open(FileStorage.__file_path) as stored_objects:
-                if stored_objects.read() != '':
+                try:
                     all_app_objects = json.load(stored_objects)
-                    for obj in all_app_objects.values():
-                        obj_cls_name = obj["__class__"]
-                        # del obj["__class__"]
-                        self.new(eval(obj_cls_name)(**obj))
+                except json.JSONDecodeError:
+                    return
+
+                for obj in all_app_objects.values():
+                    obj_cls_name = obj["__class__"]
+                    self.new(eval(obj_cls_name)(**obj))
+
         except FileNotFoundError:
             return
