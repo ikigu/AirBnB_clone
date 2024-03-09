@@ -7,7 +7,11 @@ from models.base_model import BaseModel
 
 
 class User(BaseModel):
-    """The user class"""
+    """
+    Represent a State. BaseModel creates a date and time
+    for when the object was instantiated and assigns an id
+    to the object.
+    """
 
     email = ""
     password = ""
