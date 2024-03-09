@@ -8,8 +8,6 @@ from models.base_model import BaseModel
 from datetime import datetime
 import models
 import unittest
-import re
-import copy
 
 
 class TestBaseClass(unittest.TestCase):
