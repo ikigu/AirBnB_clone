@@ -22,7 +22,11 @@ class HBNBCommand(cmd.Cmd):
                            'Place', 'Review', 'State', 'User')
 
     def __get_args(self, line):
-        """Gets args from console"""
+        """
+        Gets args from console and creates a list.
+        Multiword arguments surrounded by double quotes
+        are treated as a single argument.
+        """
 
         if '"' not in line:
             return line.split()
@@ -82,13 +86,34 @@ class HBNBCommand(cmd.Cmd):
         pass
 
     def do_help(self, line):
-        """Show help for available commands."""
+        """
+        Shows all available commands. Run:
+
+            help <command>
+
+        to show help for a specific command.
+
+        Synopsis:
+            help <optional command>
+        """
         super().do_help(line)
 
     def do_create(self, line):
         """
-        Creates a new instance of BaseModel,
-        saves it (to the JSON file) and prints the id.
+        Creates a new instance of an object,
+        saves it to storage and prints the id of the new object.
+
+        Synopsis:
+            create <Object>
+
+        Availabe Object names:
+            1. Amenity
+            2. BaseModel
+            3. City
+            4. Place
+            5. Review
+            6. State
+            7. User
         """
 
         args = self.__get_args(line)
@@ -106,7 +131,19 @@ class HBNBCommand(cmd.Cmd):
     def do_show(self, line):
         """
         Prints string representateion of instance
-        based on the class name and id
+        based on the Object name and id.
+
+        Synopsis:
+            show <Object> <Object_id>
+
+        Availabe Object names:
+            1. Amenity
+            2. BaseModel
+            3. City
+            4. Place
+            5. Review
+            6. State
+            7. User
         """
 
         args = self.__get_args(line)
@@ -128,7 +165,19 @@ class HBNBCommand(cmd.Cmd):
 
     def do_destroy(self, line):
         """
-        Deletes an instance based on the class name and id
+        Deletes an instance based on the Object name and id.
+
+        Synopsis:
+            destroy <Object> <Object_id>
+
+        Availabe Object names:
+            1. Amenity
+            2. BaseModel
+            3. City
+            4. Place
+            5. Review
+            6. State
+            7. User
         """
 
         args = self.__get_args(line)
@@ -149,8 +198,22 @@ class HBNBCommand(cmd.Cmd):
 
     def do_all(self, line):
         """
-        Prints all string representation of all instances
-        based or not on the class name.
+        Prints the string representation of all Objects.
+        To show objects of a single type, run:
+
+            all <Object name>
+
+        Synopsis:
+            all <optional Object name>
+
+        Available Object names:
+            1. Amenity
+            2. BaseModel
+            3. City
+            4. Place
+            5. Review
+            6. State
+            7. User
         """
 
         all_objects = storage.all()
@@ -168,9 +231,21 @@ class HBNBCommand(cmd.Cmd):
 
     def do_update(self, line):
         """
-        Updates an instance based on the class name and id
-        by adding or updating attribute (save the change into
-        the JSON file)
+        Updates an Object based on the Object name and id.
+        This command can also be used to add a new attribute,
+        with no differences in use.
+
+        Synopsis:
+            update <Object> <Object_id> <attribute_key> <attribute_value>
+
+        Availabe Object names:
+            1. Amenity
+            2. BaseModel
+            3. City
+            4. Place
+            5. Review
+            6. State
+            7. User
         """
 
         args = self.__get_args(line)
