@@ -1,47 +1,55 @@
 # Airbnb Clone - The console
 
-This repository sets up a storage engine for the data needed by the HBNB app. It creates the following models:
+This repository sets up a storage engine for the data needed by the HBNB app. It includes a command interpreter to manage app objects. The command interpreter can be used to run CRUD and other operations (counting, computing stats, etc) on app objects.
 
--   Base Model
--   User Model
--   City Model
--   Amenity Model
--   Place Model
--   Review Model
--   State Model
+## Running the command interpreter
 
-## The console
-
-A console is included to run CRUD operations on the file storage system. To interact run:
-
-```
-<command> <Model> <object_id>
-```
-
-The following commands are available
-
-1. `show`: requires a model and the object id: Shows string representation of an object.
-2. `all`: <Model> is optional. Will show all objects in your storage. When <Model> is added, will show objects of that model.
-3. `destroy`: add <Model> and <object_id> to destroy a particular object
-4. `update`: add <Model> and <object_id>, followed by <attribute_key> <attrribute_value> to update an object of a particular id. Only one key/value pair can be updated at a time.
-5. `create`: Takes one argument, <Model> and creates an object of that type. Returns the id of the new object.
-
-## Running the console
-
-1. First clone the repo by running:
+To start the command interpreter, first clone this repository by running this command on your terminal:
 
 ```bash
 git clone https://github.com/ikigu/AirBnB_clone
 ```
 
-2. Then cd into the AirBnB directory
+Then `cd` into the `AirBnB_clone` repository:
 
 ```bash
 cd AirBnB_clone
 ```
 
-3. Finally, launch the console by running the following command:
+Finally, launch the console by running:
 
 ```bash
 ./console.py
 ```
+
+## Available commands
+
+When the console starts, a prompt will be shown:
+
+```
+(hbnb)
+```
+
+To list all available commands, run:
+
+```
+help
+```
+
+This will list out all the commands that can be run on the console. To learn the syntax and function of each command, you can run:
+
+```
+help <command>
+```
+
+## Available Objects
+
+This console allows you to operate on the following objects:
+
+1. Amenity
+2. BaseModel
+3. City
+4. Place
+5. Review
+6. State
+7. User
