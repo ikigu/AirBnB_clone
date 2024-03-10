@@ -101,3 +101,50 @@ class BaseModel:
                 print(", ", end="")
 
         print(']')
+
+    @classmethod
+    def show(cls, _id):
+        """
+        Prints object of given class and id.
+        """
+        all_objects = storage.all()
+
+        try:
+            print(all_objects[f"{cls.__name__}.{_id}"])
+        except KeyError:
+            print("** instance not found **")
+
+    @classmethod
+    def destroy(cls, _id):
+        """
+        Deletes object of given class and id
+        """
+
+        all_objects = storage.all()
+
+        try:
+            del all_objects[f"{cls.__name__}.{_id}"]
+        except KeyError:
+            return print("** instance not found **")
+
+        storage.save()
+
+    # @classmethod
+    # def update(cls, id, attr_key=None, attr_value=None, *args, **kwargs):
+    #     """
+    #     Updates an object of given class and id.
+    #     Updates or adds a field in an object.
+
+    #     Args:
+    #         cls (class): The class of object to update
+    #         id (str): The id of object to update
+    #         attr_key: The object attribute key
+    #         attr_value: The new value of object attribute key
+    #         *args (tuple): unused positional arguments
+    #         **kwargs (dict): keyword arguments
+    #     """
+
+    #     all_objects = storage.all()
+
+    #     # if attr_key != None and attr_value != None:
+    #     #     try:
