@@ -135,22 +135,46 @@ class BaseModel:
 
         storage.save()
 
-    # @classmethod
-    # def update(cls, id, attr_key=None, attr_value=None, *args, **kwargs):
-    #     """
-    #     Updates an object of given class and id.
-    #     Updates or adds a field in an object.
+    @classmethod
+    def update(cls, _id=None, attr_key=None, attr_value=None, *args, **kwargs):
+        """
+        Updates an object of given class and id.
+        Updates or adds a field in an object.
 
-    #     Args:
-    #         cls (class): The class of object to update
-    #         id (str): The id of object to update
-    #         attr_key: The object attribute key
-    #         attr_value: The new value of object attribute key
-    #         *args (tuple): unused positional arguments
-    #         **kwargs (dict): keyword arguments
-    #     """
+        Args:
+            cls (class): The class of object to update
+            id (str): The id of object to update
+            attr_key: The object attribute key
+            attr_value: The new value of object attribute key
+            *args (tuple): unused positional arguments
+            **kwargs (dict): keyword arguments
+        """
 
-    #     all_objects = storage.all()
+        all_objects = storage.all()
 
-    #     # if attr_key != None and attr_value != None:
-    #     #     try:
+        print(all_objects[f"{cls.__name__}.62709ab4-3b02-4fd5-909a-651edc1c6d00"])
+
+        if _id is None:
+            return print("** instance id missing **")
+
+        if kwargs is None or kwargs == {}:
+            if attr_key is None:
+                return print("** attribute name missing **")
+
+            if attr_value is None:
+                return print("** value missing **")
+
+            try:
+                all_objects[f"{cls.__name__}.{_id}"][attr_key] = attr_value
+            except KeyError:
+                return print("** no instance found **")
+
+        else:
+            try:
+                for k, v in kwargs.items():
+                    all_objects[f"{cls.__name__}.{_id}"][k] = v
+            except KeyError:
+                return print("** no instance found **")
+
+        storage.save()
+
