@@ -13,6 +13,17 @@ from models.user import User
 import cmd
 
 
+class_lookup = {
+    "Amenity": Amenity,
+    "BaseModel": BaseModel,
+    "City": City,
+    "Place": Place,
+    "Review": Review,
+    "State": State,
+    "User": User
+}
+
+
 class HBNBCommand(cmd.Cmd):
     """Runs HBNB console"""
 
@@ -201,12 +212,12 @@ class HBNBCommand(cmd.Cmd):
         Prints the string representation of all Objects.
         To show objects of a single type, run:
 
-            all <Object name>
+            all <Object>
 
         Synopsis:
             all <optional Object name>
 
-        Available Object names:
+        Available Objects:
             1. Amenity
             2. BaseModel
             3. City
@@ -272,6 +283,17 @@ class HBNBCommand(cmd.Cmd):
             storage.save()
         except KeyError:
             print("** no instance found **")
+
+    def default(self, line):
+        try:
+            parts = line.split('.')
+            class_ = class_lookup.get(parts[0])
+            method_name = parts[1].split('(')[0]
+            getattr(class_, method_name)()
+
+        except (KeyError, AttributeError, TypeError) as e:
+            # print(e)
+            super().default(line)
 
 
 if __name__ == '__main__':
