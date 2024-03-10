@@ -29,14 +29,28 @@ class TestConsole(unittest.TestCase):
 
     def tearDown(self):
         if os.path.isfile('file.json'):
-            print('found file.json')
             os.remove('file.json')
-f
+
 
     def test_create_no_arguments(self):
         with patch('sys.stdout', new=StringIO()) as f:
             HBNBCommand().onecmd('create')
 
             self.assertEqual(f.getvalue(), self.NO_CLASS_NAME)
+    
+    def test_create_class_name_no_exist(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('create NonExistentClass')
 
-    def test_create_no
+            self.assertEqual(f.getvalue(), self.CLASS_NO_EXIST)
+
+    def test_create_class_correct(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('create User')
+
+            object_id = f.getvalue()[:-1]
+            class_name = 'User'
+
+            stored_objects = storage.all()
+
+            self.assertIn(f"{class_name}.{object_id}", stored_objects)
