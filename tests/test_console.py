@@ -4,15 +4,13 @@
 """Tests the console module"""
 
 
-HBNBCommand = __import__('console').HBNBCommand
-
-from io import StringIO
-from models import storage
-from unittest.mock import patch
-
-import os
-import sys
 import unittest
+import sys
+import os
+from unittest.mock import patch
+from models import storage
+from io import StringIO
+HBNBCommand = __import__('console').HBNBCommand
 
 
 class TestConsole(unittest.TestCase):
@@ -31,25 +29,35 @@ class TestConsole(unittest.TestCase):
         if os.path.isfile('file.json'):
             os.remove('file.json')
 
-
     def test_create_no_arguments(self):
         with patch('sys.stdout', new=StringIO()) as f:
             HBNBCommand().onecmd('create')
 
             self.assertEqual(f.getvalue(), self.NO_CLASS_NAME)
-    
+
     def test_create_class_name_no_exist(self):
         with patch('sys.stdout', new=StringIO()) as f:
             HBNBCommand().onecmd('create NonExistentClass')
 
             self.assertEqual(f.getvalue(), self.CLASS_NO_EXIST)
 
-    def test_create_class_correct(self):
+    def test_create_class_User(self):
         with patch('sys.stdout', new=StringIO()) as f:
             HBNBCommand().onecmd('create User')
 
             object_id = f.getvalue()[:-1]
             class_name = 'User'
+
+            stored_objects = storage.all()
+
+            self.assertIn(f"{class_name}.{object_id}", stored_objects)
+
+    def test_create_class_Amenity(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('create Amenity')
+
+            object_id = f.getvalue()[:-1]
+            class_name = 'Amenity'
 
             stored_objects = storage.all()
 
