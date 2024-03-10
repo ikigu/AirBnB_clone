@@ -59,6 +59,7 @@ class BaseModel:
     def __str__(self):
         """Return the string representation of the BaseModel instance."""
         clname = self.__class__.__name__
+        return "[{}] ({}) {}".format(clname, self.id, self.__dict__)
 
     @classmethod
     def count(cls):
