@@ -152,8 +152,6 @@ class BaseModel:
 
         all_objects = storage.all()
 
-        print(all_objects[f"{cls.__name__}.62709ab4-3b02-4fd5-909a-651edc1c6d00"])
-
         if _id is None:
             return print("** instance id missing **")
 
@@ -165,16 +163,17 @@ class BaseModel:
                 return print("** value missing **")
 
             try:
-                all_objects[f"{cls.__name__}.{_id}"][attr_key] = attr_value
+                all_objects[f"{cls.__name__}.{_id}"].__dict__[
+                    attr_key] = attr_value
+                all_objects[f"{cls.__name__}.{_id}"].save()
             except KeyError:
                 return print("** no instance found **")
 
         else:
             try:
                 for k, v in kwargs.items():
-                    all_objects[f"{cls.__name__}.{_id}"][k] = v
+                    all_objects[f"{cls.__name__}.{_id}"].__dict__[k] = v
             except KeyError:
                 return print("** no instance found **")
 
         storage.save()
-
