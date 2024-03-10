@@ -292,7 +292,7 @@ class HBNBCommand(cmd.Cmd):
             getattr(class_, method_name)()
 
         except (KeyError, AttributeError, TypeError) as e:
-            print(e)
+            # print(e)
             super().default(line)
 
 
