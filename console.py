@@ -74,9 +74,9 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return False
         elif args[0] not in HBNBCommand.__available_classes:
-            print("** class name doesn't exist **")
+            print("** class doesn't exist **")
             return False
-        elif len(args) == 1:
+        elif len(args) == 1 and command != 'create':
             print("** instance id missing **")
             return False
         elif command == 'update' and len(args) == 2:
@@ -128,7 +128,7 @@ class HBNBCommand(cmd.Cmd):
         """
 
         args = self.__get_args(line)
-        args_are_valid = self.__validate_arguments
+        args_are_valid = self.__validate_arguments(args, 'create')
 
         if args_are_valid is False:
             return
@@ -331,7 +331,7 @@ class HBNBCommand(cmd.Cmd):
 
             result = getattr(class_, method_name)(*arguments)
 
-        except (KeyError, AttributeError, TypeError) as e:
+        except (IndexError, KeyError, AttributeError, TypeError) as e:
             super().default(line)
 
 

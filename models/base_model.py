@@ -103,29 +103,35 @@ class BaseModel:
         print(']')
 
     @classmethod
-    def show(cls, _id):
+    def show(cls, _id=None):
         """
         Prints object of given class and id.
         """
         all_objects = storage.all()
 
+        if _id is None:
+            return print("** instance id missing **")
+
         try:
             print(all_objects[f"{cls.__name__}.{_id}"])
         except KeyError:
-            print("** instance not found **")
+            print("** no instance found **")
 
     @classmethod
-    def destroy(cls, _id):
+    def destroy(cls, _id=None):
         """
         Deletes object of given class and id
         """
 
         all_objects = storage.all()
 
+        if _id is None:
+            return print("** instance id missing **")
+
         try:
             del all_objects[f"{cls.__name__}.{_id}"]
         except KeyError:
-            return print("** instance not found **")
+            return print("** no instance found **")
 
         storage.save()
 
