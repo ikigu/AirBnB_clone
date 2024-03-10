@@ -59,4 +59,44 @@ class BaseModel:
     def __str__(self):
         """Return the string representation of the BaseModel instance."""
         clname = self.__class__.__name__
-        return "[{}] ({}) {}".format(clname, self.id, self.__dict__)
+
+    @classmethod
+    def count(cls):
+        """
+        Prints a count of objects in storage that are of this class.
+        """
+
+        all_objs = storage.all()
+        count = 0
+
+        for k, v in all_objs.items():
+
+            if all_objs[k].to_dict()['__class__'] == cls.__name__:
+                count += 1
+
+        print(count)
+
+    @classmethod
+    def all(cls):
+        """
+        Fetches all instances of subclasses
+        of this class from storage and prints them.
+        """
+
+        all_objs = storage.all()
+        all_objs_of_class = []
+
+        for k, v in all_objs.items():
+
+            if all_objs[k].to_dict()['__class__'] == cls.__name__:
+                all_objs_of_class.append(all_objs[k])
+
+        print('[', end="")
+
+        for i in range(0, len(all_objs_of_class)):
+            print(all_objs_of_class[i], end="")
+
+            if i != len(all_objs_of_class) - 1:
+                print(", ", end="")
+
+        print(']')
