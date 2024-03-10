@@ -33,13 +33,13 @@ When the console starts, a prompt will be shown:
 To list all available commands, run:
 
 ```
-help
+(hbnb) help
 ```
 
 This will list out all the commands that can be run on the console. To learn the syntax and function of each command, you can run:
 
 ```
-help <command>
+(hbnb) help <command>
 ```
 
 ## Available Objects
