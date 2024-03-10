@@ -345,7 +345,7 @@ class HBNBCommand(cmd.Cmd):
                 arguments = self.__get_method_arguments(arguments)
 
                 for arg in arguments:
-                    if type(arg) == str:
+                    if type(arg) != dict:
                         args.append(arg)
                     elif type(arg) == dict:
                         for k, v in arg.items():
@@ -353,7 +353,9 @@ class HBNBCommand(cmd.Cmd):
 
                 args = tuple(a for a in args)
 
-            result = getattr(class_, method_name)(*args, **kwargs)
+            arguments = args
+
+            result = getattr(class_, method_name)(*arguments, **kwargs)
 
         except (IndexError, KeyError, AttributeError, TypeError) as e:
             print(e)
