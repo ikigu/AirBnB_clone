@@ -1,6 +1,6 @@
 # Airbnb Clone - The console
 
-This repository sets up a storage engine for the data needed by the HBNB app. It includes a command interpreter to manage app objects. The command interpreter can be used to run CRUD and other operations (counting, computing stats, etc) on app objects.
+The first step in creating this AirBnB clone is setting up a storage engine for the data needed by the app. The engine includes a command interpreter to manage app objects. The command interpreter can be used to run CRUD and other operations (counting, computing stats, etc) on app objects.
 
 ## Running the command interpreter
 
