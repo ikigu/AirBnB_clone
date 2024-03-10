@@ -332,6 +332,7 @@ class HBNBCommand(cmd.Cmd):
             result = getattr(class_, method_name)(*arguments)
 
         except (IndexError, KeyError, AttributeError, TypeError) as e:
+            print(e)
             super().default(line)
 
 
