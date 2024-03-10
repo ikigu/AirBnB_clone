@@ -260,7 +260,7 @@ class HBNBCommand(cmd.Cmd):
         """
 
         args = self.__get_args(line)
-        args_are_valid = self.__validate_arguments(args)
+        args_are_valid = self.__validate_arguments(args, 'update')
 
         if args_are_valid is False:
             return
