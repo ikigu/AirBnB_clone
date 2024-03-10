@@ -284,15 +284,54 @@ class HBNBCommand(cmd.Cmd):
         except KeyError:
             print("** no instance found **")
 
+    def __get_method_arguments(self, line):
+        """
+        Retrieves the arguments passed to a method,
+        when a command given to the console is a function.
+        """
+
+        arguments_string = []
+
+        if '}' in line:
+            arguments_string = line[:-1].split(',', 1)
+        else:
+            arguments_string = line[:-1].split(',')
+
+        parsed_arguments = []
+
+        for word in arguments_string:
+            word = word.strip()
+
+            if word[-1] == '"':
+                word = word.replace('"', '')
+
+            if word[-1] == '}':
+                word = eval(word)
+
+            parsed_arguments.append(word)
+
+        return tuple(word for word in parsed_arguments)
+
     def default(self, line):
         try:
             parts = line.split('.')
             class_ = class_lookup.get(parts[0])
-            method_name = parts[1].split('(')[0]
-            getattr(class_, method_name)()
+
+            if class_ is None:
+                return print("** class doesn't exist **")
+
+            method_and_arguments_list = parts[1].split('(')
+            method_name = method_and_arguments_list[0]
+            arguments = method_and_arguments_list[1]
+
+            if (arguments == ')'):
+                arguments = tuple()
+            else:
+                arguments = self.__get_method_arguments(arguments)
+
+            result = getattr(class_, method_name)(*arguments)
 
         except (KeyError, AttributeError, TypeError) as e:
-            # print(e)
             super().default(line)
 
 
