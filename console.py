@@ -308,13 +308,25 @@ class HBNBCommand(cmd.Cmd):
             if word[-1] == '}':
                 word = eval(word)
 
+            if "." in word and type(word) == str:
+                print(word)
+                try:
+                    word = float(word)
+                except ValueError:
+                    pass
+            elif type(word) is str:
+                try:
+                    word = int(word)
+                except ValueError:
+                    pass
+
             parsed_arguments.append(word)
 
         return tuple(word for word in parsed_arguments)
 
     def default(self, line):
         try:
-            parts = line.split('.')
+            parts = line.split('.', 1)
             class_ = class_lookup.get(parts[0])
 
             if class_ is None:
@@ -324,12 +336,24 @@ class HBNBCommand(cmd.Cmd):
             method_name = method_and_arguments_list[0]
             arguments = method_and_arguments_list[1]
 
+            args = []
+            kwargs = {}
+
             if (arguments == ')'):
                 arguments = tuple()
             else:
                 arguments = self.__get_method_arguments(arguments)
 
-            result = getattr(class_, method_name)(*arguments)
+                for arg in arguments:
+                    if type(arg) == str:
+                        args.append(arg)
+                    elif type(arg) == dict:
+                        for k, v in arg.items():
+                            kwargs[k] = v
+
+                args = tuple(a for a in args)
+
+            result = getattr(class_, method_name)(*args, **kwargs)
 
         except (IndexError, KeyError, AttributeError, TypeError) as e:
             print(e)
