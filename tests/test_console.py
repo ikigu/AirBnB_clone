@@ -176,6 +176,7 @@ class TestConsole(unittest.TestCase):
         self.assertTrue(f"{state_id}" in all_printed_objects)
         self.assertTrue(f"{user_id}" in all_printed_objects)
 
+    def test_all_state(self):
         with patch('sys.stdout', new=StringIO()) as f:
             HBNBCommand().onecmd('create State')
             state_id_1 = f.getvalue().strip()  # Get the state ID
@@ -190,7 +191,6 @@ class TestConsole(unittest.TestCase):
             HBNBCommand().onecmd('all State')
             states = f.getvalue().strip()  # Get the state ID
 
-        self.assertTrue(f"{state_id}" in states)
         self.assertTrue(f"{state_id_1}" in states)
         self.assertTrue(f"{state_id_2}" in states)
         self.assertTrue(f"{state_id_3}" in states)
@@ -201,3 +201,55 @@ class TestConsole(unittest.TestCase):
             error = f.getvalue()
 
             self.assertEqual(error, self.CLASS_NO_EXIST)
+
+    def test_update_errors_no_class(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('update')
+            no_class_error = f.getvalue()
+
+            self.assertEqual(no_class_error, self.NO_CLASS_NAME)
+
+    def test_update_class_no_exist(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('update BogusClass')
+            class_no_exist_error = f.getvalue()
+
+            self.assertEqual(class_no_exist_error, self.CLASS_NO_EXIST)
+
+    def test_update_no_id(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('update BaseModel')
+            no_id_error = f.getvalue()
+
+            self.assertEqual(no_id_error, self.ID_NOT_PASSED)
+
+    def test_no_key_error(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('update BaseModel some-id-that-works')
+            no_key_error = f.getvalue()
+
+            self.assertEqual(no_key_error, self.NO_ATTR_KEY)
+
+    def test_no_value_error(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('update BaseModel some-id some-key')
+            no_value_error = f.getvalue()
+
+            self.assertEqual(no_value_error, self.NO_ATTR_VALUE)
+
+    def test_update_correct_implementation(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('create Review')
+            review_id = f.getvalue().strip()
+
+        HBNBCommand().onecmd(f'update Review {review_id} owner Monsieur')
+
+        all_objects = storage.all()
+
+        self.assertEqual(all_objects[f"Review.{review_id}"].__dict__[
+                         'owner'], 'Monsieur')
+
+    def test_no_instance_error(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('update BaseModel some-id some-key somevalue')
+            no_instance_error = f.getvalue()
