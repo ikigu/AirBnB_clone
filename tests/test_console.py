@@ -139,3 +139,65 @@ class TestConsole(unittest.TestCase):
             all_objects = storage.all()
 
             self.assertNotIn(f"User.{object_id}", all_objects)
+
+    def test_all_no_class(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('create User')
+            user_id = f.getvalue().strip()
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('create Review')
+            review_id = f.getvalue().strip()  # Get the review ID
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('create Amenity')
+            amenity_id = f.getvalue().strip()  # Get the amenity ID
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('create City')
+            city_id = f.getvalue().strip()  # Get the city ID
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('create BaseModel')
+            base_model_id = f.getvalue().strip()  # Get the base model ID
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('create Place')
+            place_id = f.getvalue().strip()  # Get the place ID
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('create State')
+            state_id = f.getvalue().strip()  # Get the state ID
+
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('all')
+            all_printed_objects = f.getvalue().strip()  # Get the printed objects
+
+        self.maxDiff = None
+        self.assertTrue(f"{amenity_id}" in all_printed_objects)
+        self.assertTrue(f"{base_model_id}" in all_printed_objects)
+        self.assertTrue(f"{city_id}" in all_printed_objects)
+        self.assertTrue(f"{place_id}" in all_printed_objects)
+        self.assertTrue(f"{review_id}" in all_printed_objects)
+        self.assertTrue(f"{state_id}" in all_printed_objects)
+        self.assertTrue(f"{user_id}" in all_printed_objects)
+
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('create State')
+            state_id_1 = f.getvalue().strip()  # Get the state ID
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('create State')
+            state_id_2 = f.getvalue().strip()  # Get the state ID
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('create State')
+            state_id_3 = f.getvalue().strip()  # Get the state ID
+
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('all State')
+            states = f.getvalue().strip()  # Get the state ID
+
+        self.assertTrue(f"{state_id}" in states)
+        self.assertTrue(f"{state_id_1}" in states)
+        self.assertTrue(f"{state_id_2}" in states)
+        self.assertTrue(f"{state_id_3}" in states)
+
+    def test_all_class_no_exist(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('all fakeClass')
+            error = f.getvalue()
+
+            self.assertEqual(error, self.CLASS_NO_EXIST)
