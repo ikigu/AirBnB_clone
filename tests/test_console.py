@@ -40,12 +40,23 @@ class TestConsole(unittest.TestCase):
 
             self.assertEqual(f.getvalue(), self.CLASS_NO_EXIST)
 
-    def test_create_class_correct_usage(self):
+    def test_create_user(self):
         with patch('sys.stdout', new=StringIO()) as f:
             HBNBCommand().onecmd('create User')
 
             object_id = f.getvalue()[:-1]
             class_name = 'User'
+
+            stored_objects = storage.all()
+
+            self.assertIn(f"{class_name}.{object_id}", stored_objects)
+
+    def test_create_class_correct_usage(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('create Amenity')
+
+            object_id = f.getvalue()[:-1]
+            class_name = 'Amenity'
 
             stored_objects = storage.all()
 
