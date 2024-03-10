@@ -25,7 +25,6 @@ class TestConsole(unittest.TestCase):
         cls.NO_ATTR_KEY = "** attribute name missing **\n"
         cls.NO_ATTR_VALUE = "** value missing **\n"
 
-    def tearDown(self):
         if os.path.isfile('file.json'):
             os.remove('file.json')
 
@@ -41,7 +40,7 @@ class TestConsole(unittest.TestCase):
 
             self.assertEqual(f.getvalue(), self.CLASS_NO_EXIST)
 
-    def test_create_class_User(self):
+    def test_create_class_correct_usage(self):
         with patch('sys.stdout', new=StringIO()) as f:
             HBNBCommand().onecmd('create User')
 
@@ -52,13 +51,80 @@ class TestConsole(unittest.TestCase):
 
             self.assertIn(f"{class_name}.{object_id}", stored_objects)
 
-    def test_create_class_Amenity(self):
+    def test_show_correct_use(self):
+        object_id = ""
+
         with patch('sys.stdout', new=StringIO()) as f:
-            HBNBCommand().onecmd('create Amenity')
+            HBNBCommand().onecmd('create User')
 
             object_id = f.getvalue()[:-1]
-            class_name = 'Amenity'
 
-            stored_objects = storage.all()
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd(f'show User {object_id}')
 
-            self.assertIn(f"{class_name}.{object_id}", stored_objects)
+            all_objects = storage.all()
+
+            self.assertEqual(f.getvalue()[:-1],
+                             all_objects[f"User.{object_id}"].__str__())
+
+    def test_show_no_class_name(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('show')
+
+            self.assertEqual(f.getvalue(), self.NO_CLASS_NAME)
+
+    def test_show_class_no_exist(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('show CNE')
+
+            self.assertEqual(f.getvalue(), self.CLASS_NO_EXIST)
+
+    def test_show_instance_no_exist(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('show User BogusID')
+
+            self.assertEqual(f.getvalue(), self.OBJ_NO_EXIST)
+
+    def test_show_instance_id_missing(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('show Amenity')
+
+            self.assertEqual(f.getvalue(), self.ID_NOT_PASSED)
+
+    def test_destroy_class_name_missing(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('destroy')
+
+            self.assertEqual(f.getvalue(), self.NO_CLASS_NAME)
+
+    def test_destroy_class_no_exist(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('destroy BadClassName')
+
+            self.assertEqual(f.getvalue(), self.CLASS_NO_EXIST)
+
+    def test_destroy_instance_id_missing(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('destroy Place')
+
+            self.assertEqual(f.getvalue(), self.ID_NOT_PASSED)
+
+    def test_show_no_instance_found(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('show Review 78d')
+
+            self.assertEqual(f.getvalue(), self.OBJ_NO_EXIST)
+
+    def test_destroy_correct_usage(self):
+        all_objects = ""
+
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('create User')
+
+            object_id = f.getvalue()[:-1]
+
+            HBNBCommand().onecmd(f'destroy User {object_id}')
+
+            all_objects = storage.all()
+
+            self.assertNotIn(f"User.{object_id}", all_objects)
