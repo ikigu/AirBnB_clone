@@ -18,7 +18,7 @@
 	border: 0px;
 	border-radius: 4px;
 	margin-right: 30px;
-	margin-left: 200px;
+	margin-left: 30%;
 }
 
 .filters > div:first-child {
@@ -44,5 +44,5 @@ h4 {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	margin-left:30px;
+	padding-left: 30px;
 }
