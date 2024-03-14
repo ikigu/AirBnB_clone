@@ -29,6 +29,10 @@
 	opacity: 90%;
 }
 
+h2 {
+	margin-bottom: 4px;
+}
+
 h3 {
 	font-weight: 600;
 }
@@ -43,6 +47,43 @@ h4 {
 	height: 100%;
 	display: flex;
 	flex-direction: column;
+	position: relative;
 	justify-content: center;
-	margin-left:30px;
+	padding-left:30px;
+	flex-grow: 1;
+}
+
+.popover {
+	background-color: #FAFAFA;
+	border: 1px solid #DDDDDD;
+	border-radius: 4px;
+	position: absolute;
+	width: 100%;
+	box-sizing: border-box;
+	left: 0px;
+	padding: 30px 30px 0 30px;
+	top: 70px;
+	display: none;
+}
+
+.popover {
+	background-color: #FAFAFA;
+	border: 1px solid #DDDDDDD;
+}
+
+.popover > li {
+	margin-bottom: 30px;
+}
+
+.locations:hover .popover,
+.amenities:hover .popover {
+	display: block;
+}
+
+li {
+	list-style: none;
+}
+
+li ul li {
+	padding-left: 12px;
 }
