@@ -1,0 +1,140 @@
+h1 {
+	text-align: left;
+	font-size: 30px;
+	margin-top: 32px;
+}
+
+.places .articles {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-around;
+}
+
+.places h2 {
+	font-size: 30px;
+	text-align: center;
+}
+
+.places article {
+	width: 390px;
+	padding: 20px;
+	margin: 20px;
+	border: 1px solid #ff5a5f;
+	border-radius: 4px;
+	position: relative;
+}
+
+.places article:last-child {
+	margin-bottom: 90px;
+}
+
+.price_by_night {
+	color: #ff5a5f;
+
+	border: 4px solid #ff5a5f;
+	border-radius: 50%;
+
+	width: 60px;
+	height: 60px;
+
+	padding: 8px;
+
+	font-size: 30px;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	position: absolute;
+	right: 20px;
+	top: 20px;
+}
+
+.information {
+	height: 80px;
+	border-top: 1px solid #dddddd;
+	border-bottom: 1px solid #dddddd;
+	display: flex;
+	justify-content: space-around;
+	margin-top: 60px;
+}
+
+.information div {
+	width: 100px;
+	background-repeat: no-repeat;
+	background-position: 50% 10%;
+	padding-bottom: 12px;
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column-reverse;
+	justify-content: flex-start;
+	align-items: center;
+}
+
+.max_guest {
+	background-image: url("../images/icon_group.png");
+}
+
+.number_rooms {
+	background-image: url("../images/bedrooms_icon.png");
+}
+
+.number_bathrooms {
+	background-image: url("../images/bath_icon.png");
+}
+
+.user {
+	margin: 16px 0;
+}
+
+.amenities_list, .reviews_list {
+    margin-top: 40px;
+}
+
+.amenities_list h2, .reviews_list h2 {
+    padding-bottom: 8px;
+    font-size: 16px;
+    border-bottom: 1px solid #dddddd;
+    text-align: left;
+}
+
+.amenities_list ul, .reviews_list ul {
+    padding-top: 8px;
+}
+
+.amenities_list ul > li, .reviews_list ul > li {
+    padding-top: 12px;
+}
+
+.amenities_list ul > li {
+    padding-left: 40px;
+    height: 28px;
+}
+
+.reviews_list h3 {
+    font-size: 14px
+}
+
+.reviews_list p {
+    font-size: 12px;
+}
+
+.tv {
+    background-image: url("../images/icon_tv.png");
+}
+
+.wifi {
+    background-image: url("../images/icon_wifi.png");
+}
+
+.pet-friendly {
+    background-image: url("../images/icon_pets.png");
+    width: 200px;
+}
+
+.tv, .wifi, .pet-friendly {
+    background-repeat: no-repeat;
+    background-size: 20px 20px;
+    background-position: 0 50%;
+}
+
